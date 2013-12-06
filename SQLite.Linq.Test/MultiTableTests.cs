@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
+﻿using System.Linq;
 using IQToolkit;
-using IQToolkit.Data;
+using IQToolkit.Data.SQLite;
 
-namespace Test
+namespace SQLite.Linq.Test
 {
     public class MultiTableTests : TestHarness
     {
@@ -25,14 +21,14 @@ namespace Test
         protected void RunTests(MultiTableContext db, string baselineFile, string newBaselineFile, bool executeQueries)
         {
             this.db = db;
-            var provider = (DbEntityProvider)db.Provider;
+            var provider = (SQLiteQueryProvider)db.Provider;
             base.RunTests(provider, baselineFile, newBaselineFile, executeQueries);
         }
 
         protected void RunTest(MultiTableContext db, string baselineFile, bool executeQueries, string testName)
         {
             this.db = db;
-            var provider = (DbEntityProvider)db.Provider;
+            var provider = (SQLiteQueryProvider)db.Provider;
             base.RunTest(provider, baselineFile, executeQueries, testName);
         }
 

@@ -10,7 +10,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace Test
+namespace SQLite.Linq.Test
 {
     using IQToolkit;
     using IQToolkit.Data;

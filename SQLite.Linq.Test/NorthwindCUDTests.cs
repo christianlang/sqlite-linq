@@ -6,7 +6,7 @@ using System.Text;
 using IQToolkit;
 using IQToolkit.Data;
 
-namespace Test
+namespace SQLite.Linq.Test
 {
     public class NorthwindCUDTests : NorthwindTestHarness
     {

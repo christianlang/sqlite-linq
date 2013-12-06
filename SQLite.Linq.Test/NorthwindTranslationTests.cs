@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 
-namespace Test
+namespace SQLite.Linq.Test
 {
     using IQToolkit.Data;
     using IQToolkit.Data.Mapping;

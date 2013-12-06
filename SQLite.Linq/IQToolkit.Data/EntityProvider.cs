@@ -280,7 +280,6 @@ namespace IQToolkit.Data
             return new QueryTranslator(this.language, this.mapping, this.policy);
         }
 
-        public abstract void DoTransacted(Action action);
         public abstract void DoConnected(Action action);
         public abstract int ExecuteCommand(string commandText);
 

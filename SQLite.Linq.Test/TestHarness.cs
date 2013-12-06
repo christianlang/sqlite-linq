@@ -11,12 +11,12 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using IQToolkit.Data;
+using IQToolkit.Data.Common;
+using IQToolkit.Data.SQLite;
 
-namespace Test
+namespace SQLite.Linq.Test
 {
-    using IQToolkit.Data;
-    using IQToolkit.Data.Common;
-
     [AttributeUsage(AttributeTargets.Method, AllowMultiple=true, Inherited=true)]
     public class ExcludeProvider : Attribute
     {
@@ -40,7 +40,7 @@ namespace Test
 
         private delegate void TestMethod();
 
-        protected DbEntityProvider provider;
+        protected SQLiteQueryProvider provider;
         XmlTextWriter baselineWriter;
         Dictionary<string, string> baselines;
         bool executeQueries;
@@ -52,14 +52,14 @@ namespace Test
         {
         }
 
-        protected void RunTest(DbEntityProvider provider, string baselineFile, bool executeQueries, string testName)
+        protected void RunTest(SQLiteQueryProvider provider, string baselineFile, bool executeQueries, string testName)
         {
             this.RunTests(provider, baselineFile, null, executeQueries,
                 new MethodInfo[] { this.GetType().GetMethod(testName) }
                 );
         }
 
-        protected void RunTests(DbEntityProvider provider, string baselineFile, string newBaselineFile, bool executeQueries)
+        protected void RunTests(SQLiteQueryProvider provider, string baselineFile, string newBaselineFile, bool executeQueries)
         {
             this.RunTests(provider, baselineFile, newBaselineFile, executeQueries, this.GetType().GetMethods().Where(m => m.Name.StartsWith("Test")).ToArray());
         }
@@ -70,7 +70,7 @@ namespace Test
             internal string Reason;
         }
 
-        protected void RunTests(DbEntityProvider provider, string baselineFile, string newBaselineFile, bool executeQueries, MethodInfo[] tests)
+        protected void RunTests(SQLiteQueryProvider provider, string baselineFile, string newBaselineFile, bool executeQueries, MethodInfo[] tests)
         {
             this.provider = provider;
             this.executeQueries = executeQueries;

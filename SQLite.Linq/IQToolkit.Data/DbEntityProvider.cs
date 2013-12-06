@@ -2,24 +2,17 @@
 // This source code is made available under the terms of the Microsoft Public License (MS-PL)
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
+using IQToolkit.Data.Common;
 using SQLite;
 
 namespace IQToolkit.Data
 {
-    using Common;
-    using Mapping;
-
     public class DbEntityProvider : EntityProvider
     {
-        SQLiteConnection connection;
+        readonly SQLiteConnection connection;
 
         int nConnectedActions = 0;
         bool actionOpenedConnection = false;
@@ -35,32 +28,6 @@ namespace IQToolkit.Data
         public virtual SQLiteConnection Connection
         {
             get { return this.connection; }
-        }
-
-        public virtual DbEntityProvider New(SQLiteConnection connection, QueryMapping mapping, QueryPolicy policy)
-        {
-            return (DbEntityProvider)Activator.CreateInstance(this.GetType(), new object[] { connection, mapping, policy });
-        }
-
-        public virtual DbEntityProvider New(SQLiteConnection connection)
-        {
-            var n = New(connection, this.Mapping, this.Policy);
-            n.Log = this.Log;
-            return n;
-        }
-
-        public virtual DbEntityProvider New(QueryMapping mapping)
-        {
-            var n = New(this.Connection, mapping, this.Policy);
-            n.Log = this.Log;
-            return n;
-        }
-
-        public virtual DbEntityProvider New(QueryPolicy policy)
-        {
-            var n = New(this.Connection, this.Mapping, policy);
-            n.Log = this.Log;
-            return n;
         }
 
         protected bool ActionOpenedConnection
@@ -85,19 +52,6 @@ namespace IQToolkit.Data
         }
 
         public override void DoConnected(Action action)
-        {
-            this.StartUsingConnection();
-            try
-            {
-                action();
-            }
-            finally
-            {
-                this.StopUsingConnection();
-            }
-        }
-
-        public override void DoTransacted(Action action)
         {
             this.StartUsingConnection();
             try
