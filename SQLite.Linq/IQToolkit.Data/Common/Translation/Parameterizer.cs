@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using SQLite.Linq;
 
 namespace IQToolkit.Data.Common
 {
@@ -137,7 +138,8 @@ namespace IQToolkit.Data.Common
 
         private bool IsNumeric(Type type)
         {
-            switch (Type.GetTypeCode(type)) {
+            switch (type.GetTypeCode())
+            {
                 case TypeCode.Boolean:
                 case TypeCode.Byte:
                 case TypeCode.Decimal:

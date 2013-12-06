@@ -10,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using SQLite.Linq;
 
 namespace IQToolkit.Data
 {
@@ -128,7 +129,7 @@ namespace IQToolkit.Data
         public virtual bool CanBeParameter(Expression expression)
         {
             Type type = TypeHelper.GetNonNullableType(expression.Type);
-            switch (Type.GetTypeCode(type))
+            switch (type.GetTypeCode())
             {
                 case TypeCode.Object:
                     if (expression.Type == typeof(Byte[]) ||
@@ -254,7 +255,7 @@ namespace IQToolkit.Data
             {
                 var gatherer = new CommandGatherer();
                 gatherer.Visit(expression);
-                return gatherer.commands.AsReadOnly();
+                return new ReadOnlyCollection<QueryCommand>(gatherer.commands);
             }
 
             protected override Expression VisitConstant(ConstantExpression c)
@@ -344,7 +345,7 @@ namespace IQToolkit.Data
             if (provider == null)
             {
                 Expression rootQueryable = this.Find(expression, parameters, typeof(IQueryable));
-                provider = Expression.Property(rootQueryable, typeof(IQueryable).GetProperty("Provider"));
+                provider = Expression.Property(rootQueryable, typeof(IQueryable).GetProperties().FirstOrDefault(p => p.Name == "Provider"));
             }
 
             return translator.Police.BuildExecutionPlan(translation, provider);
@@ -359,87 +360,6 @@ namespace IQToolkit.Data
                     return found;
             }
             return TypedSubtreeFinder.Find(expression, type);
-        }
-           
-        public static QueryMapping GetMapping(string mappingId)
-        {
-            if (mappingId != null)
-            {
-                Type type = FindLoadedType(mappingId);
-                if (type != null)
-                {
-                    return new AttributeMapping(type);
-                }
-                if (File.Exists(mappingId))
-                {
-                    return XmlMapping.FromXml(File.ReadAllText(mappingId));
-                }
-            }
-            return new ImplicitMapping();
-        }
-
-        public static Type GetProviderType(string providerName)
-        {
-            if (!string.IsNullOrEmpty(providerName))
-            {
-                var type = FindInstancesIn(typeof(EntityProvider), providerName).FirstOrDefault();
-                if (type != null)
-                    return type;
-            }
-            return null;
-        }
-
-        private static Type FindLoadedType(string typeName)
-        {
-            foreach (var assem in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                var type = assem.GetType(typeName, false, true);
-                if (type != null)
-                    return type;
-            }
-            return null;
-        }
-
-        private static IEnumerable<Type> FindInstancesIn(Type type, string assemblyName)
-        {
-            Assembly assembly = GetAssemblyForNamespace(assemblyName);
-            if (assembly != null)
-            {
-                foreach (var atype in assembly.GetTypes())
-                {
-                    if (string.Compare(atype.Namespace, assemblyName, true) == 0
-                        && type.IsAssignableFrom(atype))
-                    {
-                        yield return atype;
-                    }
-                }
-            }
-        }
-
-        private static Assembly GetAssemblyForNamespace(string nspace)
-        {
-            foreach (var assem in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                if (assem.FullName.Contains(nspace))
-                {
-                    return assem;
-                }
-            }
-
-            return Load(nspace + ".dll");
-        }
-
-        private static Assembly Load(string name)
-        {
-            // try to load it.
-            try
-            {
-                return Assembly.LoadFrom(name);
-            }
-            catch
-            {
-            }
-            return null;
         }
     }
 }

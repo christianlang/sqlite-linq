@@ -95,7 +95,6 @@
     <Compile Include="IQToolkit.Data\EntityProvider.cs" />
     <Compile Include="IQToolkit.Data\Mapping\AttributeMapping.cs" />
     <Compile Include="IQToolkit.Data\Mapping\ImplicitMapping.cs" />
-    <Compile Include="IQToolkit.Data\Mapping\XmlMapping.cs" />
     <Compile Include="IQToolkit\CompoundKey.cs" />
     <Compile Include="IQToolkit\DeferredList.cs" />
     <Compile Include="IQToolkit\DeferredValue.cs" />
@@ -121,13 +120,13 @@
     <Compile Include="IQToolkit\ScopedDictionary.cs" />
     <Compile Include="SqlDbType.cs" />
     <Compile Include="SQLite.cs" />
-    <Compile Include="SQLiteAsync.cs" />
     <Compile Include="IQToolkit\StrongDelegate.cs" />
     <Compile Include="IQToolkit\TopologicalSort.cs" />
     <Compile Include="IQToolkit\TypedSubtreeFinder.cs" />
     <Compile Include="IQToolkit\TypeHelper.cs" />
     <Compile Include="IQToolkit\Updatable.cs" />
     <Compile Include="SQLiteDataReader.cs" />
+    <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

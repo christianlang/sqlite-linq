@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using SQLite.Linq;
 
 namespace IQToolkit.Data.Common
 {
@@ -34,7 +35,7 @@ namespace IQToolkit.Data.Common
                 {
                     body = Expression.Call(typeof(Enumerable), "SingleOrDefault", new Type[] { actualElementType }, p);
                 }
-                else if (expectedType.IsGenericType && 
+                else if (expectedType.GetTypeInfo().IsGenericType && 
                     (expectedType == typeof(IQueryable) ||
                      expectedType == typeof(IOrderedQueryable) ||
                      expectedType.GetGenericTypeDefinition() == typeof(IQueryable<>) ||
@@ -50,10 +51,10 @@ namespace IQToolkit.Data.Common
                 {
                     body = Expression.Call(typeof(Enumerable), "ToArray", new Type[] { expectedElementType }, CoerceElement(expectedElementType, p));
                 }
-                else if (expectedType.IsGenericType && expectedType.GetGenericTypeDefinition().IsAssignableFrom(typeof(IList<>)))
+                else if (expectedType.GetTypeInfo().IsGenericType && expectedType.GetGenericTypeDefinition().IsAssignableFrom(typeof(IList<>)))
                 {
-                    var gt = typeof(DeferredList<>).MakeGenericType(expectedType.GetGenericArguments());
-                    var cn = gt.GetConstructor(new Type[] {typeof(IEnumerable<>).MakeGenericType(expectedType.GetGenericArguments())});
+                    var gt = typeof(DeferredList<>).MakeGenericType(expectedType.GetTypeInfo().GenericTypeArguments);
+                    var cn = gt.GetConstructor(new Type[] { typeof(IEnumerable<>).MakeGenericType(expectedType.GetTypeInfo().GenericTypeArguments) });
                     body = Expression.New(cn, CoerceElement(expectedElementType, p));
                 }
                 else if (expectedType.IsAssignableFrom(typeof(List<>).MakeGenericType(actualElementType)))

@@ -39,28 +39,6 @@ namespace IQToolkit.Data.Common
                 || this.IsNestedEntity(entity, member);
         }
 
-        public override object CloneEntity(MappingEntity entity, object instance)
-        {
-            object clone = base.CloneEntity(entity, instance);
-
-            // need to clone nested entities too
-            foreach (var mi in this.GetMappedMembers(entity))
-            {
-                if (this.IsNestedEntity(entity, mi))
-                {
-                    MappingEntity nested = this.GetRelatedEntity(entity, mi);
-                    var nestedValue = mi.GetValue(instance);
-                    if (nestedValue != null)
-                    {
-                        var nestedClone = this.CloneEntity(nested, mi.GetValue(instance));
-                        mi.SetValue(clone, nestedClone);
-                    }
-                }
-            }
-
-            return clone;
-        }
-
         public override bool IsModified(MappingEntity entity, object instance, object original)
         {
             if (base.IsModified(entity, instance, original))
@@ -198,7 +176,7 @@ namespace IQToolkit.Data.Common
                 pc.Projector
                 );
 
-            return (ProjectionExpression)this.Translator.Police.ApplyPolicy(proj, entity.ElementType);
+            return (ProjectionExpression)this.Translator.Police.ApplyPolicy(proj, entity.ElementType.GetTypeInfo());
         }
 
         private void GetColumns(MappingEntity entity, Dictionary<string, TableAlias> aliases, List<ColumnDeclaration> columns)

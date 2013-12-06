@@ -22,7 +22,7 @@ namespace IQToolkit.Data.Common
         {
             NamedValueGatherer gatherer = new NamedValueGatherer();
             gatherer.Visit(expr);
-            return gatherer.namedValues.ToList().AsReadOnly();
+            return new ReadOnlyCollection<NamedValueExpression>(gatherer.namedValues.ToList());
         }
 
         protected override Expression VisitNamedValue(NamedValueExpression value)

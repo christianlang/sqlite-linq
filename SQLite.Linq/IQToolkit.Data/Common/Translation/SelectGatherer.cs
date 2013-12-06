@@ -21,7 +21,7 @@ namespace IQToolkit.Data.Common
         {
             var gatherer = new SelectGatherer();
             gatherer.Visit(expression);
-            return gatherer.selects.AsReadOnly();
+            return new ReadOnlyCollection<SelectExpression>(gatherer.selects);
         }
 
         protected override Expression VisitSelect(SelectExpression select)

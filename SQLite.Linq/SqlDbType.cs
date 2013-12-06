@@ -1,4 +1,4 @@
-﻿namespace SQLite
+﻿namespace SQLite.Linq
 {
     /// <summary>
     /// Specifies SQL Server-specific data type of a field, property, for use in a <see cref="T:System.Data.SqlClient.SqlParameter"/>.

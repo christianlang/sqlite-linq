@@ -10,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using SQLite.Linq;
 
 namespace IQToolkit.Data
 {
@@ -28,7 +29,7 @@ namespace IQToolkit.Data
                 throw new ArgumentNullException("fnApply");
             if (fnApply.Parameters.Count != 1)
                 throw new ArgumentException("Apply function has wrong number of arguments.");
-            this.AddOperation(TypeHelper.GetElementType(fnApply.Parameters[0].Type), fnApply);
+            this.AddOperation(TypeHelper.GetElementType(fnApply.Parameters[0].Type).GetTypeInfo(), fnApply);
         }
 
         public void Apply<TEntity>(Expression<Func<IEnumerable<TEntity>, IEnumerable<TEntity>>> fnApply)
@@ -78,7 +79,7 @@ namespace IQToolkit.Data
         private void Defer(MemberInfo member)
         {
             Type mType = TypeHelper.GetMemberType(member);
-            if (mType.IsGenericType)
+            if (mType.GetTypeInfo().IsGenericType)
             {
                 var gType = mType.GetGenericTypeDefinition();
                 if (gType != typeof(IEnumerable<>)

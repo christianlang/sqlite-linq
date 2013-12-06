@@ -2,8 +2,10 @@
 // This source code is made available under the terms of the Microsoft Public License (MS-PL)
 
 using System;
+using System.Reflection;
 using System.Text;
 using SQLite;
+using SQLite.Linq;
 
 namespace IQToolkit.Data
 {
@@ -83,7 +85,7 @@ namespace IQToolkit.Data
                     {
                         length = 80;
                     }
-                    else if (string.Compare(args[0], "max", true) == 0)
+                    else if (string.Compare(args[0], "max", StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         length = Int32.MaxValue;
                     }
@@ -166,9 +168,9 @@ namespace IQToolkit.Data
 
         public override QueryType GetColumnType(Type type)
         {
-            bool isNotNull = type.IsValueType && !TypeHelper.IsNullableType(type);
+            bool isNotNull = type.GetTypeInfo().IsValueType && !TypeHelper.IsNullableType(type);
             type = TypeHelper.GetNonNullableType(type);
-            switch (Type.GetTypeCode(type))
+            switch (type.GetTypeCode())
             {
                 case TypeCode.Boolean:
                     return NewType(SqlDbType.Bit, isNotNull, 0, 0, 0);

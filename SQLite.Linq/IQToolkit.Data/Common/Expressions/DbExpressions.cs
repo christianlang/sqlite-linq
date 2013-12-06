@@ -56,9 +56,23 @@ namespace IQToolkit.Data.Common
 
     public abstract class DbExpression : Expression
     {
-        protected DbExpression(DbExpressionType eType, Type type)
-            : base((ExpressionType)eType, type)
+        private readonly DbExpressionType nodeType;
+        private readonly Type type;
+
+        protected DbExpression(DbExpressionType nodeType, Type type)
         {
+            this.nodeType = nodeType;
+            this.type = type;
+        }
+
+        public override Type Type
+        {
+            get { return this.type; }
+        }
+
+        public override ExpressionType NodeType
+        {
+            get { return (ExpressionType) this.nodeType; }
         }
 
         public override string ToString()
@@ -450,10 +464,10 @@ namespace IQToolkit.Data.Common
     public abstract class SubqueryExpression : DbExpression
     {
         SelectExpression select;
-        protected SubqueryExpression(DbExpressionType eType, Type type, SelectExpression select)
-            : base(eType, type)
+        protected SubqueryExpression(DbExpressionType nodeType, Type type, SelectExpression select)
+            : base(nodeType, type)
         {
-            System.Diagnostics.Debug.Assert(eType == DbExpressionType.Scalar || eType == DbExpressionType.Exists || eType == DbExpressionType.In);
+            System.Diagnostics.Debug.Assert(nodeType == DbExpressionType.Scalar || nodeType == DbExpressionType.Exists || nodeType == DbExpressionType.In);
             this.select = select;
         }
         public SelectExpression Select
@@ -717,18 +731,31 @@ namespace IQToolkit.Data.Common
 
     public class BatchExpression : Expression
     {
+        Type type;
+        DbExpressionType nodeType;
         Expression input;
         LambdaExpression operation;
         Expression batchSize;
         Expression stream;
 
         public BatchExpression(Expression input, LambdaExpression operation, Expression batchSize, Expression stream)
-            : base((ExpressionType)DbExpressionType.Batch, typeof(IEnumerable<>).MakeGenericType(operation.Body.Type))
         {
+            this.type = typeof (IEnumerable<>).MakeGenericType(operation.Body.Type);
+            this.nodeType = DbExpressionType.Batch;
             this.input = input;
             this.operation = operation;
             this.batchSize = batchSize;
             this.stream = stream;
+        }
+
+        public override Type Type
+        {
+            get { return this.type; }
+        }
+
+        public override ExpressionType NodeType
+        {
+            get { return (ExpressionType) this.nodeType; }
         }
 
         public Expression Input
@@ -777,8 +804,8 @@ namespace IQToolkit.Data.Common
 
     public abstract class CommandExpression : DbExpression
     {
-        protected CommandExpression(DbExpressionType eType, Type type)
-            : base(eType, type)
+        protected CommandExpression(DbExpressionType nodeType, Type type)
+            : base(nodeType, type)
         {
         }
     }
@@ -987,14 +1014,27 @@ namespace IQToolkit.Data.Common
 
     public class VariableExpression : Expression
     {
-        string name;
-        QueryType queryType;
+        private readonly Type type;
+        private readonly DbExpressionType nodeType;
+        private readonly string name;
+        private readonly QueryType queryType;
 
         public VariableExpression(string name, Type type, QueryType queryType)
-            : base((ExpressionType)DbExpressionType.Variable, type)
         {
+            this.type = type;
+            this.nodeType = DbExpressionType.Variable;
             this.name = name;
             this.queryType = queryType;
+        }
+
+        public override Type Type
+        {
+            get { return this.type; }
+        }
+
+        public override ExpressionType NodeType
+        {
+            get { return (ExpressionType)this.nodeType; }
         }
 
         public string Name

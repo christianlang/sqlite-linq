@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using SQLite.Linq;
 
 namespace IQToolkit
 {
@@ -52,7 +53,7 @@ namespace IQToolkit
         /// <returns></returns>
         public static Delegate CreateDelegate(Type delegateType, object target, MethodInfo method)
         {
-            return CreateDelegate(delegateType, (Func<object[], object>)Delegate.CreateDelegate(typeof(Func<object[], object>), target, method));
+            return CreateDelegate(delegateType, (Func<object[], object>)method.CreateDelegate(typeof(Func<object[], object>), target));
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace IQToolkit
         /// <returns></returns>
         public static Delegate CreateDelegate(Type delegateType, Func<object[], object> fn)
         {
-            MethodInfo invoke = delegateType.GetMethod("Invoke");
+            MethodInfo invoke = delegateType.GetMethods().FirstOrDefault(m => m.Name == "Invoke");
             var parameters = invoke.GetParameters();
             Type[] typeArgs = new Type[1 + parameters.Length];
             for (int i = 0, n = parameters.Length; i < n; i++)
@@ -75,7 +76,7 @@ namespace IQToolkit
             {
                 var gm = _meths[typeArgs.Length - 1];
                 var m = gm.MakeGenericMethod(typeArgs);
-                return Delegate.CreateDelegate(delegateType, new StrongDelegate(fn), m);
+                return m.CreateDelegate(delegateType, new StrongDelegate(fn));
             }
             throw new NotSupportedException("Delegate has too many arguments");
         }

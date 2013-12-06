@@ -116,7 +116,7 @@ namespace IQToolkit.Data.Common
             }
             if (alternate != null)
             {
-                columns = alternate.AsReadOnly();
+                columns = new ReadOnlyCollection<ColumnDeclaration>(alternate);
             }
 
             Expression take = this.Visit(select.Take);

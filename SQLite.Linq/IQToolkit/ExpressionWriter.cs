@@ -222,19 +222,19 @@ namespace IQToolkit
             {
                 name = name.Substring(0, iGeneneric);
             }
-            if (type.IsGenericType || type.IsGenericTypeDefinition)
+            if (type.GetTypeInfo().IsGenericType || type.GetTypeInfo().IsGenericTypeDefinition)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append(name);
                 sb.Append("<");
-                var args = type.GetGenericArguments();
+                var args = type.GetTypeInfo().GenericTypeArguments;
                 for (int i = 0, n = args.Length; i < n; i++)
                 {
                     if (i > 0)
                     {
                         sb.Append(",");
                     }
-                    if (type.IsGenericType)
+                    if (type.GetTypeInfo().IsGenericType)
                     {
                         sb.Append(this.GetTypeName(args[i]));
                     }

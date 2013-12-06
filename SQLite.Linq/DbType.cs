@@ -1,4 +1,4 @@
-﻿namespace SQLite
+﻿namespace SQLite.Linq
 {
     /// <summary>
     /// Specifies the data type of a field, a property, or a Parameter object of a .NET Framework data provider.

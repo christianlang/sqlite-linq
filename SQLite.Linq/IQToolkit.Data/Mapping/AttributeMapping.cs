@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using SQLite.Linq;
 
 namespace IQToolkit.Data.Mapping
 {
@@ -70,7 +71,7 @@ namespace IQToolkit.Data.Mapping
     {
         Type contextType;
         Dictionary<string, MappingEntity> entities = new Dictionary<string, MappingEntity>();
-        ReaderWriterLock rwLock = new ReaderWriterLock();
+        ReaderWriterLockSlim rwLock = new ReaderWriterLockSlim();
 
         public AttributeMapping(Type contextType)
         {
@@ -91,21 +92,29 @@ namespace IQToolkit.Data.Mapping
         private MappingEntity GetEntity(Type elementType, string tableId, Type entityType)
         {
             MappingEntity entity;
-            rwLock.AcquireReaderLock(Timeout.Infinite);
-            if (!entities.TryGetValue(tableId, out entity))
+            rwLock.EnterUpgradeableReadLock();
+            try
             {
-                rwLock.ReleaseReaderLock();
-                rwLock.AcquireWriterLock(Timeout.Infinite);
                 if (!entities.TryGetValue(tableId, out entity))
                 {
-                    entity = this.CreateEntity(elementType, tableId, entityType);
-                    this.entities.Add(tableId, entity);
+                    rwLock.EnterWriteLock();
+                    try
+                    {
+                        if (!entities.TryGetValue(tableId, out entity))
+                        {
+                            entity = this.CreateEntity(elementType, tableId, entityType);
+                            this.entities.Add(tableId, entity);
+                        }
+                    }
+                    finally
+                    {
+                        rwLock.ExitWriteLock();
+                    }
                 }
-                rwLock.ReleaseWriterLock();
             }
-            else
+            finally
             {
-                rwLock.ReleaseReaderLock();
+                rwLock.ExitUpgradeableReadLock();
             }
             return entity;
         }
@@ -113,19 +122,21 @@ namespace IQToolkit.Data.Mapping
         protected virtual IEnumerable<MappingAttribute> GetMappingAttributes(string rootEntityId)
         {
             var contextMember = this.FindMember(this.contextType, rootEntityId);
-            return (MappingAttribute[])Attribute.GetCustomAttributes(contextMember, typeof(MappingAttribute));
+            return (IEnumerable<MappingAttribute>) contextMember.GetCustomAttributes(typeof (MappingAttribute));
         }
 
         public override string GetTableId(Type entityType)
         {
             if (contextType != null)
             {
-                foreach (var mi in contextType.GetMembers(BindingFlags.Instance | BindingFlags.Public))
+                foreach (var fi in contextType.GetFields().Where(f => f.IsPublic && !f.IsStatic))
                 {
-                    FieldInfo fi = mi as FieldInfo;
                     if (fi != null && TypeHelper.GetElementType(fi.FieldType) == entityType)
                         return fi.Name;
-                    PropertyInfo pi = mi as PropertyInfo;
+                }
+
+                foreach (var pi in contextType.GetProperties().Where(p => p.GetMethod.IsPublic && !p.GetMethod.IsStatic))
+                {
                     if (pi != null && TypeHelper.GetElementType(pi.PropertyType) == entityType)
                         return pi.Name;
                 }
@@ -196,7 +207,7 @@ namespace IQToolkit.Data.Mapping
             string[] names = path.Split(dotSeparator);
             foreach (string name in names)
             {
-                member = type.GetMember(name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.IgnoreCase).FirstOrDefault();
+                member = type.GetPublicInstanceMember(name);
                 if (member == null)
                 {
                     throw new InvalidOperationException(string.Format("AttributMapping: the member '{0}' does not exist on type '{1}'", name, type.Name));
@@ -434,7 +445,7 @@ namespace IQToolkit.Data.Mapping
                     if (m2 != null)
                         return m2;
                 }
-                else if (this.IsColumn(entity, m) && string.Compare(this.GetColumnName(entity, m), columnName, true) == 0)
+                else if (this.IsColumn(entity, m) && string.Compare(this.GetColumnName(entity, m), columnName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     return m;
                 }

@@ -125,7 +125,7 @@ namespace IQToolkit
                         return this.PostEval(Expression.Constant(me.Member.GetValue(ce.Value), type));
                     }
                 }
-                if (type.IsValueType)
+                if (type.GetTypeInfo().IsValueType)
                 {
                     e = Expression.Convert(e, typeof(object));
                 }

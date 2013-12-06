@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using SQLite.Linq;
 
 namespace IQToolkit
 {
@@ -24,7 +25,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                (MethodInfo)MethodInfo.GetCurrentMethod(),
+                GetMethodInfo(() => Insert(null, null, null)),
                 collection.Expression,
                 Expression.Constant(instance),
                 resultSelector != null ? (Expression)Expression.Quote(resultSelector) : Expression.Constant(null, typeof(LambdaExpression))
@@ -45,7 +46,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(S)),
+                GetMethodInfo(() => Insert<T, S>(null, default(T), null)),
                 collection.Expression,
                 Expression.Constant(instance),
                 resultSelector != null ? (Expression)Expression.Quote(resultSelector) : Expression.Constant(null, typeof(Expression<Func<T,S>>))
@@ -69,7 +70,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                (MethodInfo)MethodInfo.GetCurrentMethod(),
+                GetMethodInfo(() => Update(null, null, null, null)),
                 collection.Expression,
                 Expression.Constant(instance),
                 updateCheck != null ? (Expression)Expression.Quote(updateCheck) : Expression.Constant(null, typeof(LambdaExpression)),
@@ -93,7 +94,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(S)),
+                GetMethodInfo(() => Update<T, S>(null, default(T), null, null)),
                 collection.Expression,
                 Expression.Constant(instance),
                 updateCheck != null ? (Expression)Expression.Quote(updateCheck) : Expression.Constant(null, typeof(Expression<Func<T, bool>>)),
@@ -131,7 +132,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                (MethodInfo)MethodInfo.GetCurrentMethod(),
+                GetMethodInfo(() => InsertOrUpdate(null, null, null, null)),
                 collection.Expression,
                 Expression.Constant(instance),
                 updateCheck != null ? (Expression)Expression.Quote(updateCheck) : Expression.Constant(null, typeof(LambdaExpression)),
@@ -155,7 +156,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T), typeof(S)),
+                GetMethodInfo(() => InsertOrUpdate<T, S>(null, default(T), null, null)),
                 collection.Expression,
                 Expression.Constant(instance),
                 updateCheck != null ? (Expression)Expression.Quote(updateCheck) : Expression.Constant(null, typeof(Expression<Func<T, bool>>)),
@@ -193,7 +194,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                (MethodInfo)MethodInfo.GetCurrentMethod(),
+                GetMethodInfo(() => Delete(null, null, null)),
                 collection.Expression,
                 Expression.Constant(instance),
                 deleteCheck != null ? (Expression)Expression.Quote(deleteCheck) : Expression.Constant(null, typeof(LambdaExpression))
@@ -213,7 +214,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T)),
+                GetMethodInfo(() => Delete<T>(null, default(T), null)),
                 collection.Expression,
                 Expression.Constant(instance),
                 deleteCheck != null ? (Expression)Expression.Quote(deleteCheck) : Expression.Constant(null, typeof(Expression<Func<T, bool>>))
@@ -237,7 +238,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()),
+                GetMethodInfo(() => Delete(null, null)),
                 collection.Expression,
                 predicate != null ? (Expression)Expression.Quote(predicate) : Expression.Constant(null, typeof(LambdaExpression))
                 );
@@ -255,7 +256,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(T)),
+                GetMethodInfo(() => Delete<T>(null, null)),
                 collection.Expression,
                 predicate != null ? (Expression)Expression.Quote(predicate) : Expression.Constant(null, typeof(Expression<Func<T, bool>>))
                 );
@@ -266,7 +267,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()),
+                GetMethodInfo(() => Batch(null, null, null, 0, false)),
                 collection.Expression,
                 Expression.Constant(items),
                 fnOperation != null ? (Expression)Expression.Quote(fnOperation) : Expression.Constant(null, typeof(LambdaExpression)),
@@ -291,7 +292,7 @@ namespace IQToolkit
         {
             var callMyself = Expression.Call(
                 null,
-                ((MethodInfo)MethodInfo.GetCurrentMethod()).MakeGenericMethod(typeof(U), typeof(T), typeof(S)),
+                GetMethodInfo(() => Batch<U,T,S>(null, null, null, 0, false)),
                 collection.Expression,
                 Expression.Constant(instances),
                 fnOperation != null ? (Expression)Expression.Quote(fnOperation) : Expression.Constant(null, typeof(Expression<Func<IUpdatable<U>, T, S>>)),
@@ -313,6 +314,11 @@ namespace IQToolkit
         public static IEnumerable<S> Batch<U, T, S>(this IUpdatable<U> collection, IEnumerable<T> instances, Expression<Func<IUpdatable<U>, T, S>> fnOperation)
         {
             return Batch<U, T, S>(collection, instances, fnOperation, 50, false);
+        }
+
+        private static MethodInfo GetMethodInfo(Expression<Action> expression)
+        {
+            return (expression.Body as MethodCallExpression).Method;
         }
     }
 }

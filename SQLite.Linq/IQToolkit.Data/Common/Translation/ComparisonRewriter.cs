@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using SQLite.Linq;
 
 namespace IQToolkit.Data.Common
 {
@@ -130,9 +131,9 @@ namespace IQToolkit.Data.Common
 
         private static MemberInfo FixMember(MemberInfo member)
         {
-            if (member.MemberType == MemberTypes.Method && member.Name.StartsWith("get_"))
+            if (member is MethodInfo && member.Name.StartsWith("get_"))
             {
-                return member.DeclaringType.GetProperty(member.Name.Substring(4));
+                return member.DeclaringType.GetProperties().FirstOrDefault(p => p.Name == member.Name.Substring(4));
             }
             return member;
         }

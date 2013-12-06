@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using SQLite.Linq;
 
 namespace IQToolkit.Data.Common
 {
@@ -180,7 +181,7 @@ namespace IQToolkit.Data.Common
         public virtual bool IsScalar(Type type)
         {
             type = TypeHelper.GetNonNullableType(type);
-            switch (Type.GetTypeCode(type))
+            switch (type.GetTypeCode())
             {
                 case TypeCode.Empty:
                 case TypeCode.DBNull:

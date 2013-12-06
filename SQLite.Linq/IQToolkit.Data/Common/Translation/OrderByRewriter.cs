@@ -186,12 +186,12 @@ namespace IQToolkit.Data.Common
                 this.columns = columns as ReadOnlyCollection<ColumnDeclaration>;
                 if (this.columns == null)
                 {
-                    this.columns = new List<ColumnDeclaration>(columns).AsReadOnly();
+                    this.columns = new ReadOnlyCollection<ColumnDeclaration>(new List<ColumnDeclaration>(columns));
                 }
                 this.orderings = orderings as ReadOnlyCollection<OrderExpression>;
                 if (this.orderings == null)
                 {
-                    this.orderings = new List<OrderExpression>(orderings).AsReadOnly();
+                    this.orderings = new ReadOnlyCollection<OrderExpression>(new List<OrderExpression>(orderings));
                 }
             }
             public ReadOnlyCollection<ColumnDeclaration> Columns

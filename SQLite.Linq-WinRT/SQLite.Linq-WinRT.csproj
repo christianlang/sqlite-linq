@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B355CFB5-4DA4-4DDA-A156-1B113C3C838A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SQLite.Linq</RootNamespace>
+    <AssemblyName>SQLite.LINQ-WinRT</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SQLite.Linq\DbType.cs">
+      <Link>DbType.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data.SQLite\SQLiteFormatter.cs">
+      <Link>IQToolkit.Data.SQLite\SQLiteFormatter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data.SQLite\SQLiteLanguage.cs">
+      <Link>IQToolkit.Data.SQLite\SQLiteLanguage.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data.SQLite\SQLiteQueryProvider.cs">
+      <Link>IQToolkit.Data.SQLite\SQLiteQueryProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data.SQLite\SQLiteTypeSystem.cs">
+      <Link>IQToolkit.Data.SQLite\SQLiteTypeSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\ExecutionBuilder.cs">
+      <Link>IQToolkit.Data\Common\ExecutionBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Expressions\Aggregator.cs">
+      <Link>IQToolkit.Data\Common\Expressions\Aggregator.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Expressions\DbExpressionComparer.cs">
+      <Link>IQToolkit.Data\Common\Expressions\DbExpressionComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Expressions\DbExpressionExtensions.cs">
+      <Link>IQToolkit.Data\Common\Expressions\DbExpressionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Expressions\DbExpressionReplacer.cs">
+      <Link>IQToolkit.Data\Common\Expressions\DbExpressionReplacer.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Expressions\DbExpressions.cs">
+      <Link>IQToolkit.Data\Common\Expressions\DbExpressions.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Expressions\DbExpressionVisitor.cs">
+      <Link>IQToolkit.Data\Common\Expressions\DbExpressionVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Expressions\DbExpressionWriter.cs">
+      <Link>IQToolkit.Data\Common\Expressions\DbExpressionWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\FieldReader.cs">
+      <Link>IQToolkit.Data\Common\FieldReader.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Language\QueryLanguage.cs">
+      <Link>IQToolkit.Data\Common\Language\QueryLanguage.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Language\QueryTypeSystem.cs">
+      <Link>IQToolkit.Data\Common\Language\QueryTypeSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Language\SqlFormatter.cs">
+      <Link>IQToolkit.Data\Common\Language\SqlFormatter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Mapping\AdvancedMapping.cs">
+      <Link>IQToolkit.Data\Common\Mapping\AdvancedMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Mapping\BasicMapping.cs">
+      <Link>IQToolkit.Data\Common\Mapping\BasicMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Mapping\QueryMapping.cs">
+      <Link>IQToolkit.Data\Common\Mapping\QueryMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\QueryCommand.cs">
+      <Link>IQToolkit.Data\Common\QueryCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\QueryExecutor.cs">
+      <Link>IQToolkit.Data\Common\QueryExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\QueryPolicy.cs">
+      <Link>IQToolkit.Data\Common\QueryPolicy.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\QueryTranslator.cs">
+      <Link>IQToolkit.Data\Common\QueryTranslator.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\AggregateChecker.cs">
+      <Link>IQToolkit.Data\Common\Translation\AggregateChecker.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\AggregateRewriter.cs">
+      <Link>IQToolkit.Data\Common\Translation\AggregateRewriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\ClientJoinedProjectionRewriter.cs">
+      <Link>IQToolkit.Data\Common\Translation\ClientJoinedProjectionRewriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\ColumnMapper.cs">
+      <Link>IQToolkit.Data\Common\Translation\ColumnMapper.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\ColumnProjector.cs">
+      <Link>IQToolkit.Data\Common\Translation\ColumnProjector.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\ComparisonRewriter.cs">
+      <Link>IQToolkit.Data\Common\Translation\ComparisonRewriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\CrossApplyRewriter.cs">
+      <Link>IQToolkit.Data\Common\Translation\CrossApplyRewriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\CrossJoinIsolator.cs">
+      <Link>IQToolkit.Data\Common\Translation\CrossJoinIsolator.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\CrossJoinRewriter.cs">
+      <Link>IQToolkit.Data\Common\Translation\CrossJoinRewriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\DeclaredAliasGatherer.cs">
+      <Link>IQToolkit.Data\Common\Translation\DeclaredAliasGatherer.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\NamedValueGatherer.cs">
+      <Link>IQToolkit.Data\Common\Translation\NamedValueGatherer.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\OrderByRewriter.cs">
+      <Link>IQToolkit.Data\Common\Translation\OrderByRewriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\Parameterizer.cs">
+      <Link>IQToolkit.Data\Common\Translation\Parameterizer.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\QueryBinder.cs">
+      <Link>IQToolkit.Data\Common\Translation\QueryBinder.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\QueryDuplicator.cs">
+      <Link>IQToolkit.Data\Common\Translation\QueryDuplicator.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\RedundantColumnRemover.cs">
+      <Link>IQToolkit.Data\Common\Translation\RedundantColumnRemover.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\RedundantJoinRemover.cs">
+      <Link>IQToolkit.Data\Common\Translation\RedundantJoinRemover.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\RedundantSubqueryRemover.cs">
+      <Link>IQToolkit.Data\Common\Translation\RedundantSubqueryRemover.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\ReferencedAliasGatherer.cs">
+      <Link>IQToolkit.Data\Common\Translation\ReferencedAliasGatherer.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\ReferencedColumnGatherer.cs">
+      <Link>IQToolkit.Data\Common\Translation\ReferencedColumnGatherer.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\RelationshipBinder.cs">
+      <Link>IQToolkit.Data\Common\Translation\RelationshipBinder.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\RelationshipIncluder.cs">
+      <Link>IQToolkit.Data\Common\Translation\RelationshipIncluder.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\SelectGatherer.cs">
+      <Link>IQToolkit.Data\Common\Translation\SelectGatherer.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\SingletonProjectionRewriter.cs">
+      <Link>IQToolkit.Data\Common\Translation\SingletonProjectionRewriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\SkipToNestedOrderByRewriter.cs">
+      <Link>IQToolkit.Data\Common\Translation\SkipToNestedOrderByRewriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\SkipToRowNumberRewriter.cs">
+      <Link>IQToolkit.Data\Common\Translation\SkipToRowNumberRewriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\SubqueryRemover.cs">
+      <Link>IQToolkit.Data\Common\Translation\SubqueryRemover.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Common\Translation\UnusedColumnRemover.cs">
+      <Link>IQToolkit.Data\Common\Translation\UnusedColumnRemover.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\DbEntityProvider.cs">
+      <Link>IQToolkit.Data\DbEntityProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\DbTypeSystem.cs">
+      <Link>IQToolkit.Data\DbTypeSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\EntityPolicy.cs">
+      <Link>IQToolkit.Data\EntityPolicy.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\EntityProvider.cs">
+      <Link>IQToolkit.Data\EntityProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Mapping\AttributeMapping.cs">
+      <Link>IQToolkit.Data\Mapping\AttributeMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit.Data\Mapping\ImplicitMapping.cs">
+      <Link>IQToolkit.Data\Mapping\ImplicitMapping.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\CompoundKey.cs">
+      <Link>IQToolkit\CompoundKey.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\DeferredList.cs">
+      <Link>IQToolkit\DeferredList.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\DeferredValue.cs">
+      <Link>IQToolkit\DeferredValue.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\EnumerateOnce.cs">
+      <Link>IQToolkit\EnumerateOnce.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\ExpressionComparer.cs">
+      <Link>IQToolkit\ExpressionComparer.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\ExpressionEvaluator.cs">
+      <Link>IQToolkit\ExpressionEvaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\ExpressionExtensions.cs">
+      <Link>IQToolkit\ExpressionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\ExpressionReplacer.cs">
+      <Link>IQToolkit\ExpressionReplacer.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\ExpressionVisitor.cs">
+      <Link>IQToolkit\ExpressionVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\ExpressionWriter.cs">
+      <Link>IQToolkit\ExpressionWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\Grouping.cs">
+      <Link>IQToolkit\Grouping.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\IEntityProvider.cs">
+      <Link>IQToolkit\IEntityProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\IEntitySession.cs">
+      <Link>IQToolkit\IEntitySession.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\MostRecentlyUsedCache.cs">
+      <Link>IQToolkit\MostRecentlyUsedCache.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\PartialEvaluator.cs">
+      <Link>IQToolkit\PartialEvaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\Query.cs">
+      <Link>IQToolkit\Query.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\QueryCache.cs">
+      <Link>IQToolkit\QueryCache.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\QueryCompiler.cs">
+      <Link>IQToolkit\QueryCompiler.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\QueryProvider.cs">
+      <Link>IQToolkit\QueryProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\ReadOnlyExtensions.cs">
+      <Link>IQToolkit\ReadOnlyExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\ReflectionExtensions.cs">
+      <Link>IQToolkit\ReflectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\ScopedDictionary.cs">
+      <Link>IQToolkit\ScopedDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\StrongDelegate.cs">
+      <Link>IQToolkit\StrongDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\TopologicalSort.cs">
+      <Link>IQToolkit\TopologicalSort.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\TypedSubtreeFinder.cs">
+      <Link>IQToolkit\TypedSubtreeFinder.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\TypeHelper.cs">
+      <Link>IQToolkit\TypeHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\IQToolkit\Updatable.cs">
+      <Link>IQToolkit\Updatable.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\SqlDbType.cs">
+      <Link>SqlDbType.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\SQLite.cs">
+      <Link>SQLite.cs</Link>
+    </Compile>
+    <Compile Include="..\SQLite.Linq\SQLiteDataReader.cs">
+      <Link>SQLiteDataReader.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeCode.cs" />
+    <Compile Include="TypeExtensions.cs" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
+    <VisualStudioVersion>12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

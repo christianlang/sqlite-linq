@@ -1632,17 +1632,6 @@ namespace Test
             return query.Where(x => x.ID == id);
         }
 
-        public void TestXmlMappingSelectCustomers()
-        {
-            var nw = new Northwind(this.provider.New(XmlMapping.FromXml(File.ReadAllText(@"Northwind.xml"))));
-
-            TestQuery(
-                from c in db.Customers
-                where c.City == "London"
-                select c.ContactName
-                );
-        }
-
         public void TestSingletonAssociationWithMemberAccess()
         {
             TestQuery(

@@ -23,7 +23,7 @@ namespace IQToolkit
                 }
                 else
                 {
-                    roc = new List<T>(collection).AsReadOnly();
+                    roc = new ReadOnlyCollection<T>(new List<T>(collection));
                 }
             }
             return roc;
@@ -31,7 +31,7 @@ namespace IQToolkit
 
         class EmptyReadOnlyCollection<T>
         {
-            internal static readonly ReadOnlyCollection<T> Empty = new List<T>().AsReadOnly();
+            internal static readonly ReadOnlyCollection<T> Empty = new ReadOnlyCollection<T>(new List<T>());
         }
     }
 }

@@ -183,7 +183,7 @@ namespace IQToolkit.Data
                 Type vtype = value.GetType();
                 if (type != vtype)
                 {
-                    if (type.IsEnum)
+                    if (type.GetTypeInfo().IsEnum)
                     {
                         if (vtype == typeof(string))
                         {
@@ -333,7 +333,7 @@ namespace IQToolkit.Data
 
             protected virtual void AddParameter(SQLiteCommand command, QueryParameter parameter, object value)
             {
-                command.Bind("@" + parameter.Name, value ?? DBNull.Value);
+                command.Bind("@" + parameter.Name, value);
             }
 
             protected virtual void LogMessage(string message)
@@ -371,7 +371,7 @@ namespace IQToolkit.Data
                         var p = command.Parameters[i];
                         var v = paramValues[i];
 
-                        if (v == null || v == DBNull.Value)
+                        if (v == null)
                         {
                             this.provider.Log.WriteLine("-- {0} = NULL", p.Name);
                         }

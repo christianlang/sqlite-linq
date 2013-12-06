@@ -252,7 +252,7 @@ namespace IQToolkit
                 }
                 if (list != null)
                 {
-                    return list.AsReadOnly();
+                    return new ReadOnlyCollection<Expression>(list);
                 }
             }
             return original;
@@ -282,7 +282,7 @@ namespace IQToolkit
                 }
                 if (list != null)
                 {
-                    return list.AsReadOnly();
+                    return new ReadOnlyCollection<Expression>(list);
                 }
             }
             return original;

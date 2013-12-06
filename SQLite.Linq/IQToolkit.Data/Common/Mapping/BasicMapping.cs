@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using SQLite.Linq;
 
 namespace IQToolkit.Data.Common
 {
@@ -213,22 +214,9 @@ namespace IQToolkit.Data.Common
         {
             //Type type = entity.ElementType.IsInterface ? entity.EntityType : entity.ElementType;
             Type type = entity.EntityType;
-            HashSet<MemberInfo> members = new HashSet<MemberInfo>(type.GetFields().Cast<MemberInfo>().Where(m => this.IsMapped(entity, m)));
-            members.UnionWith(type.GetProperties().Cast<MemberInfo>().Where(m => this.IsMapped(entity, m)));
+            HashSet<MemberInfo> members = new HashSet<MemberInfo>(type.GetFields().Where(m => this.IsMapped(entity, m)));
+            members.UnionWith(type.GetProperties().Where(m => this.IsMapped(entity, m)));
             return members.OrderBy(m => m.Name);
-        }
-
-        public override object CloneEntity(MappingEntity entity, object instance)
-        {
-            var clone = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(entity.EntityType);
-            foreach (var mi in this.GetMappedMembers(entity))
-            {
-                if (this.IsColumn(entity, mi))
-                {
-                    mi.SetValue(clone, mi.GetValue(instance));
-                }
-            }
-            return clone;
         }
 
         public override bool IsModified(MappingEntity entity, object instance, object original)
@@ -413,7 +401,7 @@ namespace IQToolkit.Data.Common
                 pc.Projector
                 );
 
-            return (ProjectionExpression)this.Translator.Police.ApplyPolicy(proj, entity.ElementType);
+            return (ProjectionExpression)this.Translator.Police.ApplyPolicy(proj, entity.ElementType.GetTypeInfo());
         }
 
         public override EntityExpression GetEntityExpression(Expression root, MappingEntity entity)
@@ -453,7 +441,7 @@ namespace IQToolkit.Data.Common
 
             // handle cases where members are not directly assignable
             EntityAssignment[] readonlyMembers = assignments.Where(b => TypeHelper.IsReadOnly(b.Member)).ToArray();
-            ConstructorInfo[] cons = entity.EntityType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+            ConstructorInfo[] cons = entity.EntityType.GetTypeInfo().DeclaredConstructors.Where(c => c.IsPublic && !c.IsStatic).ToArray();
             bool hasNoArgConstructor = cons.Any(c => c.GetParameters().Length == 0);
 
             if (readonlyMembers.Length > 0 || !hasNoArgConstructor)
@@ -483,7 +471,7 @@ namespace IQToolkit.Data.Common
             Expression result;
             if (assignments.Count > 0)
             {
-                if (entity.ElementType.IsInterface)
+                if (entity.ElementType.GetTypeInfo().IsInterface)
                 {
                     assignments = this.MapAssignments(assignments, entity.EntityType).ToList();
                 }
@@ -506,10 +494,10 @@ namespace IQToolkit.Data.Common
         {
             foreach (var assign in assignments)
             {
-                MemberInfo[] members = entityType.GetMember(assign.Member.Name, BindingFlags.Instance|BindingFlags.Public);
-                if (members != null && members.Length > 0)
+                var member = entityType.GetPublicInstanceMember(assign.Member.Name);
+                if (member != null)
                 {
-                    yield return new EntityAssignment(members[0], assign.Expression);
+                    yield return new EntityAssignment(member, assign.Expression);
                 }
                 else
                 {
@@ -535,7 +523,7 @@ namespace IQToolkit.Data.Common
                 if (assignment == null)
                 {
                     assignment = members.FirstOrDefault(a =>
-                        string.Compare(p.Name, a.Member.Name, true) == 0
+                        string.Compare(p.Name, a.Member.Name, StringComparison.OrdinalIgnoreCase) == 0
                         && p.ParameterType.IsAssignableFrom(a.Expression.Type));
                 }
                 if (assignment != null)
@@ -547,11 +535,11 @@ namespace IQToolkit.Data.Common
                 }
                 else
                 {
-                    MemberInfo[] mems = cons.DeclaringType.GetMember(p.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
-                    if (mems != null && mems.Length > 0)
+                    var member = cons.DeclaringType.GetPublicInstanceMember(p.Name);
+                    if (member != null)
                     {
                         args[i] = Expression.Constant(TypeHelper.GetDefault(p.ParameterType), p.ParameterType);
-                        mis[i] = mems[0];
+                        mis[i] = member;
                     }
                     else
                     {

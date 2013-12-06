@@ -153,7 +153,6 @@ namespace IQToolkit.Data.Common
         public abstract Expression GetPrimaryKeyQuery(MappingEntity entity, Expression source, Expression[] keys);
         public abstract IEnumerable<EntityInfo> GetDependentEntities(MappingEntity entity, object instance);
         public abstract IEnumerable<EntityInfo> GetDependingEntities(MappingEntity entity, object instance);
-        public abstract object CloneEntity(MappingEntity entity, object instance);
         public abstract bool IsModified(MappingEntity entity, object instance, object original);
 
         public abstract QueryMapper CreateMapper(QueryTranslator translator);

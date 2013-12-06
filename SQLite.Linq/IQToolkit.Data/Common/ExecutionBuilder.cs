@@ -10,6 +10,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using SQLite.Linq;
 
 namespace IQToolkit.Data.Common
 {
@@ -77,7 +78,7 @@ namespace IQToolkit.Data.Common
         private static Expression MakeSequence(IList<Expression> expressions)
         {
             Expression last = expressions[expressions.Count - 1];
-            expressions = expressions.Select(e => e.Type.IsValueType ? Expression.Convert(e, typeof(object)) : e).ToList();
+            expressions = expressions.Select(e => e.Type.GetTypeInfo().IsValueType ? Expression.Convert(e, typeof(object)) : e).ToList();
             return Expression.Convert(Expression.Call(typeof(ExecutionBuilder), "Sequence", null, Expression.NewArrayInit(typeof(object), expressions)), last.Type);
         }
 
@@ -141,7 +142,7 @@ namespace IQToolkit.Data.Common
             else
             {
                 return Expression.New(
-                    typeof(CompoundKey).GetConstructors()[0],
+                    typeof(CompoundKey).GetTypeInfo().DeclaredConstructors.First(),
                     Expression.NewArrayInit(typeof(object), key.Select(k => (Expression)Expression.Convert(k, typeof(object))))
                     );
             }
@@ -181,8 +182,8 @@ namespace IQToolkit.Data.Common
 
             // 2) agg(lookup[outer])
             ParameterExpression lookup = Expression.Parameter(toLookup.Type, "lookup" + iLookup);
-            PropertyInfo property = lookup.Type.GetProperty("Item");
-            Expression access = Expression.Call(lookup, property.GetGetMethod(), this.Visit(outerKey));
+            PropertyInfo property = lookup.Type.GetPublicProperty("Item");
+            Expression access = Expression.Call(lookup, property.GetMethod, this.Visit(outerKey));
             if (join.Projection.Aggregator != null)
             {
                 // apply aggregator
@@ -434,7 +435,7 @@ namespace IQToolkit.Data.Common
                     decl.Source,
                     Expression.NewArrayInit(
                         typeof(object),
-                        decl.Variables.Select(v => v.Expression.Type.IsValueType
+                        decl.Variables.Select(v => v.Expression.Type.GetTypeInfo().IsValueType
                             ? Expression.Convert(v.Expression, typeof(object))
                             : v.Expression).ToArray()
                         ),
@@ -522,7 +523,7 @@ namespace IQToolkit.Data.Common
             }
             else
             {
-                System.Diagnostics.Debug.Fail(string.Format("column not in scope: {0}", column));
+                System.Diagnostics.Debug.Assert(false, string.Format("column not in scope: {0}", column));
             }
             return column;
         }

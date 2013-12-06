@@ -547,7 +547,7 @@ namespace IQToolkit.Data.Common
             }
             if (alternate != null)
             {
-                return alternate.AsReadOnly();
+                return new ReadOnlyCollection<ColumnAssignment>(alternate);
             }
             return assignments;
         }
@@ -570,7 +570,7 @@ namespace IQToolkit.Data.Common
             }
             if (alternate != null)
             {
-                return alternate.AsReadOnly();
+                return new ReadOnlyCollection<ColumnDeclaration>(alternate);
             }
             return columns;
         }
@@ -593,7 +593,7 @@ namespace IQToolkit.Data.Common
             }
             if (alternate != null)
             {
-                return alternate.AsReadOnly();
+                return new ReadOnlyCollection<VariableDeclaration>(alternate);
             }
             return decls;
         }
@@ -618,7 +618,7 @@ namespace IQToolkit.Data.Common
                 }
                 if (alternate != null)
                 {
-                    return alternate.AsReadOnly();
+                    return new ReadOnlyCollection<OrderExpression>(alternate);
                 }
             }
             return expressions;

@@ -75,7 +75,7 @@ namespace IQToolkit.Data.Common
         {
             ColumnProjector projector = new ColumnProjector(language, expression, existingColumns, newAlias, existingAliases);
             Expression expr = projector.Visit(expression);
-            return new ProjectedColumns(expr, projector.columns.AsReadOnly());
+            return new ProjectedColumns(expr, new ReadOnlyCollection<ColumnDeclaration>(projector.columns));
         }
 
         public static ProjectedColumns ProjectColumns(QueryLanguage language, Expression expression, IEnumerable<ColumnDeclaration> existingColumns, TableAlias newAlias, params TableAlias[] existingAliases)
